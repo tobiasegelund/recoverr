@@ -2,6 +2,8 @@ import typing as t
 
 
 class Result:
+    """A Result to store a value or error depending on the outcome of the result"""
+
     def __init__(
         self, value: t.Any | None = None, error: BaseException | None = None
     ) -> None:
