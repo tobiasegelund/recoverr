@@ -2,7 +2,10 @@ import typing as t
 
 
 class Result:
-    def __init__(self, value: t.Optional[t.Any] = None, error: t.Optional[t.Any] = None):
+    def __init__(self, value: t.Any | None = None, error: t.Any | None = None):
+        if value is None and error is None:
+            raise ValueError("Both `value` and `error` cannot be None")
+
         self.value = value
         self.error = error
 
@@ -24,5 +27,13 @@ class Result:
     def unwrap_or(self, default: t.Any) -> t.Any:
         return self.value if self.is_ok() else default
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Result<{self.value}, {self.error}>"
+
+    def __call__(self):
+        pass
+
+
+@Result
+def test():
+    pass
