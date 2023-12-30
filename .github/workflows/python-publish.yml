@@ -21,10 +21,10 @@ jobs:
           pip install build twine wheel
       - name: Build package
         run: |
-          make build-package
+          python -m build
       - name: Publish package
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          python3 -m twine upload dist/*
+          python -m twine upload dist/*
