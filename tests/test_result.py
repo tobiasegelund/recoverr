@@ -1,5 +1,5 @@
 import pytest
-from recoverr import Result, Ok, Err
+from recoverr import Ok, Err
 
 
 @pytest.mark.parametrize("v1, v2, expected", [(2, 2, True), (2, 3, False)])
