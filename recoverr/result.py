@@ -13,6 +13,10 @@ class Result:
         self._error = error
 
     def ok(self) -> t.Any:
+        """Returns the value and dispatches the error if any
+
+        Note it may return None
+        """
         return self._value
 
     def err(self) -> t.Any:
