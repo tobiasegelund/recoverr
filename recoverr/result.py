@@ -25,8 +25,12 @@ class Result:
     def expect(self) -> None:
         if self._error is None:
             return self._value
-
         raise self._error
+
+    def or_(self, res):
+        if self.is_err():
+            return res
+        return self
 
     def unwrap(self) -> t.Any:
         if self.is_ok():
@@ -34,16 +38,33 @@ class Result:
 
         raise self._error
 
+    def unwrap_err(self) -> t.Any:
+        if self.is_ok():
+            raise ValueError("Result stores a Ok value")
+        return self._error
+
     def unwrap_or(self, default: t.Any) -> t.Any:
-        return self._value if self.is_ok() else default
+        if self.is_ok():
+            return self._value
+        return default
 
     def __repr__(self) -> str:
         return f"Result<{self._value}, {self._error}>"
 
+    def __hash__(self):
+        key = (self._value, self._error, self.__class__)
+        return hash(key)
+
     def __eq__(self, obj) -> bool:
         try:
             return obj.unwrap() == self._value
-        except Exception:
+        except Exception as _:
+            return False
+
+    def __nq__(self, obj) -> bool:
+        try:
+            return obj.unwrap() == self._value
+        except Exception as _:
             return False
 
 
