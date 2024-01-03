@@ -1,25 +1,26 @@
 import typing as t
 
+T = t.TypeVar("T")
+E = t.TypeVar("E")
+
 
 class Result:
     """A Result to store a value or error depending on the outcome of the result"""
 
-    def __init__(
-        self, value: t.Any | None = None, error: BaseException | None = None
-    ) -> None:
+    def __init__(self, value: T | None = None, error: E | None = None) -> None:
         assert (value is None) != (error is None)
 
         self._value = value
         self._error = error
 
-    def ok(self) -> t.Any:
+    def ok(self) -> T | None:
         """Returns the value and dispatches the error if any
 
         Note it may return None
         """
         return self._value
 
-    def err(self) -> t.Any:
+    def err(self) -> E | None:
         return self._error
 
     def is_ok(self) -> bool:
@@ -38,18 +39,18 @@ class Result:
             return res
         return self
 
-    def unwrap(self) -> t.Any:
+    def unwrap(self) -> T:
         if self.is_ok():
             return self._value
 
         raise self._error
 
-    def unwrap_err(self) -> t.Any:
+    def unwrap_err(self) -> E:
         if self.is_ok():
             raise ValueError("Result stores a Ok value")
         return self._error
 
-    def unwrap_or(self, default: t.Any) -> t.Any:
+    def unwrap_or(self, default: T) -> T:
         if self.is_ok():
             return self._value
         return default
@@ -74,11 +75,11 @@ class Result:
             return False
 
 
-def Ok(value: t.Any) -> Result:
+def Ok(value: T) -> Result:
     return Result(value=value)
 
 
-def Err(value: t.Any) -> Result:
+def Err(value: T) -> Result:
     if not isinstance(value, BaseException):
         raise ValueError(f"`value` must derive from BaseException")
     return Result(error=value)
